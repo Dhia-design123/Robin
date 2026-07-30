@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #05070a;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+  .hud-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    padding: 24px;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(29,227,255,0.15);
+    margin-bottom: 20px;
+  }
+  .brand {
+    color: #d6f4ff;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 3px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #7fd8e8;
+    margin-left: 12px;
+    background: rgba(29,227,255,0.08);
+    border: 1px solid rgba(29,227,255,0.2);
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #2ee6a8; }
+  .topbar-right { color: #7fd8e8; font-size: 13px; }
+
+  /* Card panels */
+  .card {
+    background: #0a0e14;
+    border: 1px solid rgba(29,227,255,0.12);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    width: 260px;
+  }
+  .card-title {
+    color: #c8ecf5;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    color: #6fa8b8;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .card-value { color: #d6f4ff; }
+
+  .left-col {
+    position: absolute;
+    top: 110px;
+    left: 24px;
+  }
+  .right-col {
+    position: absolute;
+    top: 110px;
+    right: 24px;
+    width: 320px;
+  }
+
+  /* Center circle */
+  .center-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 240px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(29, 227, 255, 0.15);
+    transition: all 0.15s ease-out;
+  }
+  .ring-outer { width: 300px; height: 300px; }
+  .ring-mid { width: 260px; height: 260px; }
+  .core {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid rgba(29,227,255,0.5);
+    background: radial-gradient(circle, rgba(10,20,26,0.95), rgba(6,12,16,0.9));
+    box-shadow: 0 0 20px rgba(29, 227, 255, 0.15), inset 0 0 20px rgba(29,227,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+}
+.core.speaking {
+    box-shadow: 0 0 40px rgba(29, 227, 255, 0.4), inset 0 0 25px rgba(29,227,255,0.15);
+    border-color: rgba(29,227,255,0.9);
+    animation: pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+  .core.muted {
+    border-color: rgba(120,120,120,0.4);
+    box-shadow: none;
+  }
+  .core-sweep {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 260deg,
+        rgba(29, 227, 255, 0.5) 300deg,
+        rgba(29, 227, 255, 0.9) 340deg,
+        transparent 360deg
+    );
+    animation: rotate-sweep 3s linear infinite;
+    mask: radial-gradient(circle, transparent 62%, black 63%, black 100%);
+    -webkit-mask: radial-gradient(circle, transparent 62%, black 63%, black 100%);
+}
+.core-sweep-2 {
+    position: absolute;
+    width: 78%;
+    height: 78%;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 180deg,
+        transparent 0deg,
+        transparent 280deg,
+        rgba(29, 227, 255, 0.35) 320deg,
+        rgba(29, 227, 255, 0.7) 350deg,
+        transparent 360deg
+    );
+    animation: rotate-sweep 4.5s linear infinite reverse;
+    mask: radial-gradient(circle, transparent 65%, black 66%, black 100%);
+    -webkit-mask: radial-gradient(circle, transparent 65%, black 66%, black 100%);
+}
+
+@keyframes rotate-sweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.core.speaking .core-sweep {
+    animation-duration: 1.2s;
+}
+.core.speaking .core-sweep-2 {
+    animation-duration: 1.8s;
+}
+
+  .robin-label {
+    position: absolute;
+    top: calc(50% + 150px);
+    left: 50%;
+    transform: translateX(-50%);
+    color: #c8ecf5;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-align: center;
+  }
+  .robin-status {
+    position: absolute;
+    top: calc(50% + 185px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #7fd8e8;
+    background: rgba(46,230,168,0.08);
+    border: 1px solid rgba(46,230,168,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <div class="hud-container">
+
+    <div class="topbar">
+      <div>
+        <span class="brand">R.O.B.I.N</span>
+        <span class="status-pill"><span class="dot"></span> Online</span>
+      </div>
+      <div class="topbar-right" id="time-value">--:--</div>
+    </div>
+
+    <div class="left-col">
+      <div class="card">
+        <div class="card-title">Status</div>
+        <div class="card-row"><span>State</span><span class="card-value" id="status-value">Active</span></div>
+        <div class="card-row"><span>Date</span><span class="card-value" id="date-value">--</span></div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="card" style="width: 100%;">
+        <div class="card-title">Today</div>
+        <div class="card-row" id="reminders-value" style="display:block; color:#d6f4ff;">No reminders</div>
+      </div>
+    </div>
+
+    <div class="center-circle">
+      <div class="ring ring-outer"></div>
+      <div class="ring ring-mid"></div>
+      <div class="core" id="core">
+        <div class="core-sweep"></div>
+        <div class="core-sweep-2"></div>
+    </div>
+    </div>
+    <div class="robin-label">R.O.B.I.N</div>
+
+  </div>
+
+<script>
+  function updateHUD(state) {
+    const core = document.getElementById('core');
+    core.classList.toggle('speaking', state.speaking);
+    core.classList.toggle('muted', state.muted);
+
+    document.getElementById('time-value').innerText = (state.time || '--:--') + '  |  ' + (state.date || '');
+    document.getElementById('date-value').innerText = state.date || '';
+    document.getElementById('status-value').innerText = state.status || 'Idle';
+    document.getElementById('reminders-value').innerText = state.reminders || 'No reminders';
+    document.getElementById('status-label').innerText =
+      state.muted ? 'Muted' : (state.speaking ? 'Speaking...' : 'Listening for wake word...');
+  }
+</script>
+</body>
+</html>

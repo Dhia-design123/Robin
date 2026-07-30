@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robin</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>ROBIN</h1>
+    <button id="notify-btn" type="button">Enable notifications</button>
+  </header>
+
+  <main>
+    <div id="chat-log"></div>
+
+    <div id="controls">
+      <form id="text-form">
+        <input id="text-input" type="text" placeholder="Type to Robin…" autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
+      <button id="mic-btn" type="button">🎤 Talk</button>
+    </div>
+  </main>
+
+  <div id="doc-panel" hidden>
+    <div class="card">
+      <div class="card-header">
+        <strong>Full details</strong>
+        <button id="doc-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div id="doc-body"></div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
