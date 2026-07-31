@@ -13,6 +13,7 @@ import inspect
 import json
 import re
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import os
 from dotenv import load_dotenv
@@ -58,7 +59,7 @@ not a long report.
 
 
 def _current_datetime_context() -> str:
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("America/New_York"))
     return f"Current date and time: {now.strftime('%Y-%m-%d %H:%M')} ({now.strftime('%A, %B %d, %Y')})"
 
 
