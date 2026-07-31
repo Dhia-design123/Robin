@@ -13,6 +13,6 @@ friday/tools/
 friday/prompts/
 friday/resources/
 friday/config.py
-friday/db/
+
 reminders.json
 _temp_reply*.mp3
