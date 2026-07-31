@@ -9,7 +9,7 @@ hud_display.html
 tray_app.py
 agent_robin.py
 main.py
-friday/tools/
+
 friday/prompts/
 friday/resources/
 friday/config.py
